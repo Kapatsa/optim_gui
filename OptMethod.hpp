@@ -8,7 +8,7 @@
 
 #ifndef OptMethod_hpp
 #define OptMethod_hpp
-
+#include <vector>
 #include <stdio.h>
 // ----------------
 #include "Area.hpp"
@@ -51,5 +51,7 @@ public:
     };
     virtual void SetLocalProb(double long num) = 0;
     int GetnIter(){return nIter;}
+    std::vector<double long> xGraph;
+    std::vector<double long> yGraph;
 };
 #endif /* OptMethod_hpp */

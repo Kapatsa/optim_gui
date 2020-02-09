@@ -51,7 +51,6 @@ double long GradDesc::optimize(Area * area, Function * func, StopCriterion * sto
     for(int i = 0; i < dim; ++i) grad[i] = - func -> grad(x0, i);
     //checking grad at x0
     if(stopCrit -> checkGrad(grad)){
-        //TODO: WHAT TO DO IF X0 IS AT THE BOUNDARY?
         do {//OPTIMIZE ALONG THE NEGATIVE GRADIENT UNTIL THE BORDER
             for(int i = 0; i < dim; ++i) grad[i] = - func -> grad(xCur, i);
             ++nIter;
@@ -73,6 +72,9 @@ double long GradDesc::optimize(Area * area, Function * func, StopCriterion * sto
             }
             //WE FOUND THE BEST VALUE ALONG THE GRADIENT
             for (int i = 0; i < dim; ++i) xCur[i] = tempBest[i];
+            xGraph.push_back(xCur[0]);
+            yGraph.push_back(xCur[1]);
+
             //cout << endl << nIter << ". " << "gradNorm: " << norm(grad, dim) << " МaxLam: " << lambdaM << endl;
             //cout << endl << "Current iteration: ";
             //print(xCur, dim);

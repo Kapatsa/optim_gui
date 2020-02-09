@@ -13,7 +13,6 @@
 #include <cmath>
 
 //-------------
-//#include "stuff.hpp"
 #include "StopCriterion.hpp"
 //-------------
 

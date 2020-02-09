@@ -1,6 +1,6 @@
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++11
 
@@ -16,17 +16,41 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Abs.cpp \
+    Area.cpp \
+    Function.cpp \
+    GradDesc.cpp \
+    OptMethod.cpp \
+    RectArea.cpp \
+    Stochastic.cpp \
+    StopCriterion.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    opt_tools.cpp \
+    optinfo.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
-    mainwindow.h
+    Abs.hpp \
+    Area.hpp \
+    Function.hpp \
+    GradDesc.hpp \
+    OptMethod.hpp \
+    RectArea.hpp \
+    Stochastic.hpp \
+    StopCriterion.hpp \
+    mainwindow.h \
+    opt_tools.hpp \
+    optinfo.h \
+    qcustomplot.h
 
 FORMS += \
     mainwindow.ui
 
 TRANSLATIONS += \
     optimization_gui_ru_RU.ts
+
+ICON = optimicon.icns
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

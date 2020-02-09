@@ -41,12 +41,11 @@ Stochastic::Stochastic(double long * xstart, int dimen, long double localProb, l
  **/
 double long Stochastic::optimize(Area * area, Function * func, StopCriterion * stopCrit) {
     
-    gen.seed(1);
+    //gen.seed(1);
     nIter = 0;
     int itersAfterLastSuccess = 0;
     
     //INITIALIZATION
-    
     int dim = func -> dim;
     
     //CREATING A DISTRIBUTION FOR THE GLOBAL AREA
@@ -60,30 +59,6 @@ double long Stochastic::optimize(Area * area, Function * func, StopCriterion * s
     
     //DISTRIBUTION FOR SWITCHING BETWEEN GLOBAL AND LOCAL SEARCH
     std::discrete_distribution<int> d {static_cast<double>(localProbability),static_cast<double>(1-localProbability)};
-    
-    // randInside TEST
-    {
-        //double long * pt = new double long [dim];
-        //for (int i = 0; i < 100; ++i) randomInside(pt, dim, u, gen);
-        //delete [] pt;
-    }
-    // rangeAroundEps TEST
-    {
-        //double long * localRange = new double long[2*dim];
-        //print(rangeAroundEps(localRange, x0, 0.2, dim, area->getRange()), 2*dim);
-        //delete [] localRange;
-    }
-    // discrete distribution TEST
-    /*
-    TODO: Check that discrete works properly from the beginning
-    {
-        std::cout << std::endl << d.probabilities()[1] << " diss 1 " << d(gen) << " " << d(gen) << std::endl;
-    for (int i = 0; i < 100; ++i){
-        std::cout << d(gen);
-    }
-    std::cout << std::endl;
-    }
-    */
     
     double long * xLocal = new double long [dim];
     for(int i = 0; i < dim; ++i) xLocal[i] = x0[i];
@@ -142,6 +117,8 @@ double long Stochastic::optimize(Area * area, Function * func, StopCriterion * s
            //RECORD VALUES INTO BEST, DECREASE DELTA, & CREATE NEW DISTRIBUTION FOR THE NEW DELTA
            for (int i = 0; i < dim; ++i) xPrev[i] = xBest[i];
            for (int i = 0; i < dim; ++i) xBest[i] = temp[i];
+           xGraph.push_back(xBest[0]);
+           yGraph.push_back(xBest[1]);
            fBest = fTemp;
            for (int i = 0; i < dim; ++i) xLocal[i] = xBest[i];
            rangeAroundEps(rangeLocal, xLocal, currentDelta, dim, area -> getRange());

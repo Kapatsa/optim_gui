@@ -35,7 +35,6 @@ public:
     long double optimize(Area * area, Function * function, StopCriterion * stopCrit) override;
     long double * getXFin() override { return xFin; };
     void SetLocalProb(double long num) override {;};
-    
 };
 
 
