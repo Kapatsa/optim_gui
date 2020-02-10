@@ -18,9 +18,13 @@ public:
     ~MainWindow();
     void Plot(QCustomPlot * customPlot);
     OptInfo opt;
+    QMouseEvent* qme;
+    double geomx;
+    double geomy;
+    int xCur;
+    int yCur;
 
 private slots:
-
 
     void on_doubleSpinBox_valueChanged(double arg1);
 
@@ -34,7 +38,11 @@ private slots:
 
     void on_pushButton_clicked();
 
-    void on_tabWidget_tabBarClicked(int index);
+    //void on_tabWidget_tabBarClicked(int index);
+
+    void mousePos(QMouseEvent* event);
+
+    void mouseClick(QMouseEvent* event);
 
 private:
     Ui::MainWindow *ui;

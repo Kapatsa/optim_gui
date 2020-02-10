@@ -3,6 +3,7 @@
 #include "optinfo.h"
 #include <iostream>
 #include <string>
+#include "qcustomplot.h"
 //---------------
 #include "Area.hpp"
 #include "RectArea.hpp"
@@ -21,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
+    connect(ui->plot, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(mousePos(QMouseEvent*)));
+    connect(ui->plot, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mouseClick(QMouseEvent*)));
     opt.functionnumber = ui->comboBox->currentIndex();
     opt.rangeX1 = ui->doubleSpinBox->value();
     opt.rangeX2 = ui->doubleSpinBox_2->value();
@@ -166,15 +169,6 @@ void MainWindow::on_pushButton_clicked()
     opt.x_0[0] = ui->x_0->value();
     opt.x_0[1] = ui->y_0->value();
 
-    //PLOT INITIAL POINT
-    QVector<double> x, y;
-    x.push_back(opt.x_0[0]);
-    y.push_back(opt.x_0[1]);
-    QCPGraph *beginPoint = ui->plot->addGraph();
-    beginPoint->setData(x, y);
-    beginPoint->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, QPen(Qt::red, 1.5), QBrush(Qt::red), 9));
-    beginPoint->setPen(QPen(QColor(120, 120, 120), 2));
-
     //CREATE ALL INSTANCES FOR OPTIMIZATION
 
     //function
@@ -249,21 +243,32 @@ void MainWindow::on_pushButton_clicked()
     method -> SetX0(opt.x_0);
     stop -> SetDim(opt.dim);
 
+    //OPTIMIZE
     opt.min = method -> optimize(&area, f, stop);
 
     opt.argmin[0] = method -> getXFin()[0];
     opt.argmin[1] = method -> getXFin()[1];
     opt.noOfIterations = method -> GetnIter();
 
+    //PLOT
     QVector<double> xGraph = QVector<double>(method->xGraph.begin(), method->xGraph.end());
     QVector<double> yGraph = QVector<double>(method->yGraph.begin(), method->yGraph.end());
-    //xGraph.push_front(opt.x_0[0]);
-    //yGraph.push_front(opt.x_0[1]);
+    xGraph.push_front(opt.x_0[0]);
+    yGraph.push_front(opt.x_0[1]);
 
-    QCPGraph *pathGraph = ui->plot->addGraph();
+    QCPCurve *pathGraph = new QCPCurve(ui->plot->xAxis, ui->plot->yAxis);
+    //QCPCurve *pathGraph = ui->plot->addGraph();
     pathGraph->setData(xGraph, yGraph);
     pathGraph->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, QPen(Qt::red, 0), QBrush(Qt::red), 5));
     pathGraph->setPen(QPen(Qt::gray, 2));
+    QCPCurve *finalPoint = new QCPCurve(ui->plot->xAxis, ui->plot->yAxis);
+    QVector<double> argx, argy;
+    argx.push_back(opt.argmin[0]);
+    argy.push_back(opt.argmin[1]);
+    finalPoint->setData(argx, argy);
+    finalPoint->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCross, QPen(Qt::yellow, 3), QBrush(Qt::yellow), 12));
+    finalPoint->setPen(QPen(QColor(120, 120, 120), 2));
+
     ui->plot->replot();
 
     ui->textBrowser->insertPlainText("min: ");
@@ -282,11 +287,38 @@ void MainWindow::on_pushButton_clicked()
     num = QString::number(double(opt.noOfIterations));
     ui->textBrowser->insertPlainText(num);
 
-    ui->plot->removeGraph(beginPoint);
-    ui->plot->removeGraph(pathGraph);
+    ui->plot->QCustomPlot::removePlottable(pathGraph);
+    ui->plot->QCustomPlot::removePlottable(finalPoint);
 }
 
-void MainWindow::on_tabWidget_tabBarClicked(int index)
+
+void MainWindow::mousePos(QMouseEvent* event)
 {
+
+}
+
+void MainWindow::mouseClick(QMouseEvent* event)
+{
+    ui->textBrowser->insertPlainText("M:");
+    QString num;
+    ui->plot->mouseMove(event);
+    geomx = opt.rangeX1 + (opt.rangeX2-opt.rangeX1)*(double((event->x()) - 57.)/413);
+    geomy = opt.rangeY1 + (opt.rangeY2-opt.rangeY1)*(1 - double((event->y()) - 16.)/503);
+    //(ui->plot->geometry().x()-57.-80.)
+    //(ui->plot->geometry().y()-16.-40.)
+    num = QString::number(geomx);
+    ui->textBrowser->insertPlainText(num);
+    ui->textBrowser->insertPlainText(" ");
+    num = QString::number(geomy);
+    ui->textBrowser->insertPlainText(num);
+    ui->textBrowser->insertPlainText("\n");
+
+    ui->x_0->setValue(geomx);
+    ui->y_0->setValue(geomy);
+
+    opt.x_0[0] = ui->x_0->value();
+    opt.x_0[1] = ui->y_0->value();
+
+    MainWindow::on_pushButton_clicked();
 
 }

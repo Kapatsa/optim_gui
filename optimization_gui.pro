@@ -26,6 +26,7 @@ SOURCES += \
     StopCriterion.cpp \
     main.cpp \
     mainwindow.cpp \
+    my_qplot.cpp \
     opt_tools.cpp \
     optinfo.cpp \
     qcustomplot.cpp
@@ -40,6 +41,7 @@ HEADERS += \
     Stochastic.hpp \
     StopCriterion.hpp \
     mainwindow.h \
+    my_qplot.h \
     opt_tools.hpp \
     optinfo.h \
     qcustomplot.h

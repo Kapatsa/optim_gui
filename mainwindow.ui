@@ -36,6 +36,9 @@
       <height>561</height>
      </rect>
     </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -88,7 +91,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -256,7 +259,7 @@
         <string>Iterative</string>
        </property>
        <property name="checked">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
       <widget class="QRadioButton" name="radioButton_2">
@@ -278,7 +281,7 @@
         <string>Local</string>
        </property>
        <property name="checked">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
      </widget>
